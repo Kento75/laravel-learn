@@ -175,6 +175,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /** User Original BootStrap */
+        App\Providers\HelloServiceProvider::class,
     ],
 
     /*
