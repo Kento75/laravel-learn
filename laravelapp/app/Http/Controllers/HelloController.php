@@ -15,7 +15,12 @@ use Illuminate\Support\Facades\DB;
 class HelloController extends Controller
 {
     public function index(Request $request) {
-        $items = DB::select('select * from people');
+        // SQL Query pattern
+        // $items = DB::select('select * from people');
+
+        // Query Builder
+        $items = DB::table('people') -> get();
+
         return view('hello.index', ['items' => $items]);
     }
 
@@ -71,5 +76,11 @@ class HelloController extends Controller
         DB::delete('delete from people where id = :id', $param);
 
         return redirect('/hello');
+    }
+
+    public function show(Request $request) {
+        $id = $request -> id;
+        $items = DB::table('people') -> where('id', '<=', $id) -> get();
+        return view('hello.show', ['items' => $items]);
     }
 }
