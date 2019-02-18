@@ -50,3 +50,5 @@ Route::post('board/add', 'BoardController@create');
 
 // REST Route
 Route::resource('rest', 'RestappController');
+
+Route::get('hello/rest', 'HelloController@rest');
