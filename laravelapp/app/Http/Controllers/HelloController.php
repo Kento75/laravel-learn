@@ -11,6 +11,7 @@ use Validator;
 use App\Http\Requests\HelloRequest;
 
 use Illuminate\Support\Facades\DB;
+use App\Person;
 
 class HelloController extends Controller
 {
@@ -19,7 +20,7 @@ class HelloController extends Controller
         // $items = DB::select('select * from people');
 
         // Query Builder
-        $items = DB::table('people') -> orderBy('age', 'asc') -> get();
+        $items = DB::table('people')->simplePaginate(2);
 
         return view('hello.index', ['items' => $items]);
     }
@@ -93,5 +94,20 @@ class HelloController extends Controller
     public function rest(Request $request)
     {
         return view('hello.rest');
+    }
+
+    public function ses_get(Request $request)
+    {
+        $sesdata = $request->session()->get('msg');
+
+        return view('hello.session', ['session_data' => $sesdata]);
+    }
+
+    public function ses_put(Request $request)
+    {
+        $msg = $request->input;
+        $request->session()->put('msg', $msg);
+
+        return redirect('hello/session');
     }
 }
