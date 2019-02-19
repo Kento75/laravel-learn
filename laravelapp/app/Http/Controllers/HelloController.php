@@ -19,10 +19,12 @@ class HelloController extends Controller
         // SQL Query pattern
         // $items = DB::select('select * from people');
 
+        $sort = $request->sort;
         // Query Builder
-        $items = DB::table('people')->simplePaginate(2);
-
-        return view('hello.index', ['items' => $items]);
+        //$items = DB::table('people')->simplePaginate(2)->orderBy($sort, 'asc');
+        $items = Person::orderBy($sort, 'asc')->Paginate(2);
+        $param = ['items' => $items, 'sort' => $sort];
+        return view('hello.index', $param);
     }
 
     public function post(Request $request) {
