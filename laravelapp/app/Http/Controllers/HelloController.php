@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Validator;
 use App\Http\Requests\HelloRequest;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Person;
 
@@ -19,11 +20,12 @@ class HelloController extends Controller
         // SQL Query pattern
         // $items = DB::select('select * from people');
 
+        $user = Auth::user();
         $sort = $request->sort;
         // Query Builder
         //$items = DB::table('people')->simplePaginate(2)->orderBy($sort, 'asc');
         $items = Person::orderBy($sort, 'asc')->Paginate(2);
-        $param = ['items' => $items, 'sort' => $sort];
+        $param = ['items' => $items, 'sort' => $sort, 'user' => $user];
         return view('hello.index', $param);
     }
 
@@ -111,5 +113,25 @@ class HelloController extends Controller
         $request->session()->put('msg', $msg);
 
         return redirect('hello/session');
+    }
+
+    // Auth logic
+    public function getAuth(Request $request)
+    {
+        $param = ['message' => 'ログインしてください。'];
+        return view('hello.auth', $param);
+    }
+
+    public function postAuth(Request $request)
+    {
+        $email = $request->email;
+        $password = $request->password;
+
+        if(Auth::attempt(['email' => $email, 'password' => $password])) {
+            $msg = 'ログインしました。(' . Auth::user()->name . ')';
+        } else {
+            $msg = 'ログインに失敗しました。';
+        }
+        return view('hello.auth', ['message' => $msg]);
     }
 }
