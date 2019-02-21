@@ -11,9 +11,9 @@ class CreateTableUser extends Migration
      *
      * @return void
      */
-    public function run()
+    public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->string("name");
             $table->string("email");
             $table->string("password");
